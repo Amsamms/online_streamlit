@@ -1,15 +1,24 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from ahmedsabri import *
 import matplotlib.pyplot as plt
 import scipy.stats as stats
-import os
-import re
-import matplotlib.pyplot as plt
 import seaborn as sns
-from datetime import datetime
-from time import time
+
+def outlier_columns(df,a=4):
+    '''
+    This function call columns which contains any outliers larger than a value ( default a=4), a represents standard deviation
+    
+    - inputs : dataframe and a ( number of standard deviations)
+    - syntax : outlier_columns(df,a=4)
+    - output : columns that have the outliers > a* standard deviation of that column
+    '''    
+    z_scores = stats.zscore(df[df.describe().columns],nan_policy='omit')
+    z_scores.fillna(0,inplace=True)
+    abs_z_scores = np.abs(z_scores)
+    (abs_z_scores>a).any(axis=0)
+    outliers_columns=abs_z_scores.columns[(abs_z_scores>a).any(axis=0)]
+    return df[outliers_columns]
 
 st.title('This simple app allows upload datasets, detects deviation and plot it if needed')
 tab1=st.tabs('************************************************************************')
