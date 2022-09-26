@@ -1,1 +1,1 @@
-web: streamlit run calcs.py
+web: sh setup.sh && streamlit run penguins-app.py
